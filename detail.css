@@ -5,7 +5,7 @@
 
 /* v29 detail theme */
 :root{--yellow:#4dffc4;--black:#0b0b10;--card:#12121a;--line:#292936;--muted:#9696a8}
-.standalone{background:radial-gradient(circle at 75% 0,rgba(139,61,255,.18),transparent 30%),#08080d}
+.standalone{background:radial-gradient(circle at 75% 0,rgba(61,255,184,.18),transparent 30%),#08080d}
 .detail-header{background:#08080dcc;border-color:#ffffff10}
 .detail-nav .logo span{color:#5cffc9}
 .back{background:#15151e;border:1px solid #ffffff0d}
@@ -14,7 +14,7 @@
 .detail-tabs{border-color:#ffffff0d}
 .detail-tabs button.active{color:#5cffc9;background:#151520}
 .detail-tabs button.active:after{background:#4dffc4}
-.cover-wrap img,.no-cover{border-color:#3dffbe55;box-shadow:0 20px 55px rgba(139,61,255,.2)}
+.cover-wrap img,.no-cover{border-color:#3dffbe55;box-shadow:0 20px 55px rgba(61,255,184,.2)}
 .quick-stats span{background:#0d0d14;border-color:#ffffff0d}
 .tag-list span{border-color:#ffffff18}
 .chapter-list button{background:#0c0c12;border-color:#ffffff0d}
@@ -33,13 +33,13 @@
 .detail-card,.chapter-list button,.related-card,.tag-list span,.quick-stats span{
   transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s ease,border-color .3s ease
 }
-.chapter-list button:hover{transform:translateX(-4px);box-shadow:0 8px 22px rgba(139,61,255,.12)}
+.chapter-list button:hover{transform:translateX(-4px);box-shadow:0 8px 22px rgba(61,255,184,.12)}
 .related-card{overflow:hidden}
 .related-card img{transition:transform .5s cubic-bezier(.22,1,.36,1)}
 .related-card:hover img{transform:scale(1.07)}
 .related-card:hover{transform:translateY(-4px);border-color:#3dffbe55}
 .cover-wrap img,.no-cover{transition:box-shadow .35s ease,transform .35s ease}
-.cover-wrap:hover img{transform:translateY(-3px);box-shadow:0 26px 60px rgba(139,61,255,.28)}
+.cover-wrap:hover img{transform:translateY(-3px);box-shadow:0 26px 60px rgba(61,255,184,.28)}
 .detail-tabs button{transition:color .25s ease}
 .detail-tabs button:after{transition:transform .3s ease;transform-origin:center}
 .big{transition:transform .25s ease}

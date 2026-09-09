@@ -16,7 +16,7 @@ body{background:#06060a!important}
 .nav-chapter.secondary{color:var(--reader-a,#4dffc4)!important}
 
 .reader-tools button,.nav-chapter,.reader-btn{transition:transform .25s ease,border-color .25s ease,color .25s ease,box-shadow .25s ease}
-.reader-tools button:hover{box-shadow:0 0 14px rgba(154,77,255,.25)}
+.reader-tools button:hover{box-shadow:0 0 14px rgba(77,255,190,.25)}
 .reader-btn:hover{transform:translateY(-1px)}
 .nav-chapter:hover:not(:disabled){transform:translateY(-2px)}
 

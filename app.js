@@ -61,7 +61,7 @@ function icon(name){const icons={
  shield:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg>'
 };return icons[name]||''}
 function profileNotice(title,text){openModal(`<div class="box profile-notice"><button class="close" onclick="closeModal()">×</button><div class="notice-icon">${icon('bell')}</div><h2>${title}</h2><p>${text}</p><button class="primary" onclick="closeModal()">باشه</button></div>`)}
-function renderHeaderProfile(){const b=$('#profileOpen');if(!b)return;if(me?.avatar)b.innerHTML=`<img class="header-avatar" src="${me.avatar}" alt="پروفایل">`;else b.innerHTML=icon('user')}
+function renderHeaderProfile(){const b=$('#loginOpen');if(!b)return;if(me)b.innerHTML=me.avatar?`<img class="header-avatar" src="${me.avatar}" alt="پروفایل">`:icon('user');else b.innerHTML=`<svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg><span>ورود / ثبت‌نام</span>`}
 function renderProfile(){const box=$('#profilePage');if(!me){box.innerHTML=`<div class="profile-login"><div class="profile-login-icon">${icon('user')}</div><h1>پروفایل</h1><p>برای استفاده از کتابخانه و امکانات حساب کاربری وارد nightcomic شو.</p><button class="primary" onclick="auth()">ورود / ثبت‌نام</button></div>`;return}
 const avatar=me.avatar?`<img src="${me.avatar}" alt="">`:me.username.slice(0,1).toUpperCase();
 box.innerHTML=`<div class="profile-top"><div class="profile-title-row"><button class="profile-back" onclick="navigate('home')">‹</button><h1>پروفایل</h1><span></span></div><div class="profile-user"><div class="avatar-wrap"><div class="avatar">${avatar}</div><label class="avatar-upload"><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onchange="uploadAvatar(this)">ویرایش پروفایل</label></div><div class="profile-user-copy"><h2>${me.username}</h2><p>${me.role==='admin'?'مدیر nightcomic':'کاربر nightcomic'}</p></div></div></div>
@@ -116,7 +116,6 @@ window.addEventListener('popstate',routeFromUrl);
 $('#search').oninput=e=>load(e.target.value);$('#searchOpen').onclick=()=>navigate('explore');initFilters();
 document.body.classList.remove('light');try{localStorage.removeItem('theme')}catch(e){}
 $('#loginOpen').onclick=()=>{if(me)navigate('profile');else auth('/profile')};
-$('#profileOpen').onclick=()=>{if(me)navigate('profile');else auth('/profile')};
 $('#notifyOpen').onclick=()=>profileNotice('اعلانات','فعلاً اعلان جدیدی برای شما ثبت نشده است.');
 async function loadFavorites(){const who=$('#who'),box=$('#favorites');if(!me){if(who)who.textContent='';if(box)box.innerHTML='';return}let d=await api('/api/me/favorites');if(who)who.textContent=`${d.works.length} اثر ذخیره شده`;if(box)box.innerHTML=d.works.map(card).join('')}
 function profile(){navigate('profile')}

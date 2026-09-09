@@ -348,7 +348,7 @@ body{
     radial-gradient(circle at 8% 30%,rgba(116,125,140,.08),transparent 24%),
     var(--bg);
 }
-header{background:rgba(5,7,6,.86);border-color:#ffffff10}
+header{background:rgba(7,8,12,.92);border-color:#ffffff10}
 .logo{letter-spacing:-.4px}.logo span,em,.pill{color:var(--a2)}
 .nav{height:72px}
 .nav-actions button{background:var(--p2);border:1px solid #ffffff08}
@@ -513,7 +513,7 @@ body,body.light{background:#08080d!important;color:#f6f6fa!important}
    ========================================================= */
 :root{
   --bg:#050509;--p:#0c0b12;--p2:#181818;--p3:#232323;
-  --t:#f7fbfa;--m:#949cab;--l:#2a303b;
+  --t:#f7f7fb;--m:#949cab;--l:#2a303b;
   --a:#c5ccd6;--a2:#c5ccd6;--a3:#747d8c;
   --glow:rgba(207,207,207,.34);--nav:rgba(12,12,12,.92);
 }

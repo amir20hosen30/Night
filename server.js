@@ -219,7 +219,7 @@ app.get('/admin',(req,res)=>{if(!user(req)||user(req).role!=='admin')return res.
 app.get('/manager',(req,res)=>{if(!user(req)||user(req).role!=='admin')return res.redirect('/login');res.sendFile(path.join(ROOT,'manager.html'))});
 app.get('/',(req,res)=>res.sendFile(path.join(ROOT,'public/index.html')));
 app.get('/home',(req,res)=>res.sendFile(path.join(ROOT,'public/index.html')));
-app.get('/login',(req,res)=>{if(user(req))return res.redirect('/home');res.sendFile(path.join(ROOT,'public/login.html'))});
+app.get('/login',(req,res)=>{if(user(req))return res.redirect('/profile');res.sendFile(path.join(ROOT,'public/login.html'))});
 app.get('*',(req,res)=>res.sendFile(path.join(ROOT,'public/index.html')));
 if(!fs.existsSync(path.join(ROOT,'public','index.html'))) throw new Error('nightcomic public/index.html is missing from deployment root');
 const server=app.listen(PORT,'0.0.0.0',()=>console.log('nightcomic running on port '+PORT));

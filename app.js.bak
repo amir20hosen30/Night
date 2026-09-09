@@ -120,10 +120,10 @@ $('#profileOpen').onclick=()=>{if(me)navigate('profile');else auth()};
 $('#notifyOpen').onclick=()=>profileNotice('اعلانات','فعلاً اعلان جدیدی برای شما ثبت نشده است.');
 async function loadFavorites(){const who=$('#who'),box=$('#favorites');if(!me){if(who)who.textContent='';if(box)box.innerHTML='';return}let d=await api('/api/me/favorites');if(who)who.textContent=`${d.works.length} اثر ذخیره شده`;if(box)box.innerHTML=d.works.map(card).join('')}
 function profile(){navigate('profile')}
-async function logout(){await api('/api/logout',{method:'POST'});location.href='/home'}
+async function logout(){await api('/api/logout',{method:'POST'});location.href='/profile'}
 async function auth(){openModal(`<div class="box"><button class="close" onclick="closeModal()">×</button><h2>ورود / ثبت‌نام</h2><div class="form"><input id="u" placeholder="نام کاربری"><input id="p" type="password" placeholder="رمز عبور"><button class="primary" onclick="login()">ورود</button><button onclick="register()">ساخت حساب جدید</button></div><p id="msg"></p></div>`)}
-async function login(){const u=$('#u'),p=$('#p'),msg=$('#msg');const username=(u?.value||'').trim(),password=p?.value||'';if(!username||!password){if(msg)msg.textContent='نام کاربری و رمز عبور را وارد کن.';return}try{await api('/api/login',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});location.href='/home'}catch(e){if(msg)msg.textContent=e.message}}
-async function register(){const u=$('#u'),p=$('#p'),msg=$('#msg');const username=(u?.value||'').trim(),password=p?.value||'';if(username.length<3){if(msg)msg.textContent='نام کاربری باید حداقل ۳ کاراکتر باشد.';return}if(password.length<6){if(msg)msg.textContent='رمز عبور باید حداقل ۶ کاراکتر باشد.';return}try{await api('/api/register',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});location.href='/home'}catch(e){if(msg)msg.textContent=e.message}}
+async function login(){try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('#u').value,password:$('#p').value})});location.href='/profile'}catch(e){$('#msg').textContent=e.message}}
+async function register(){try{await api('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('#u').value,password:$('#p').value})});location.href='/profile'}catch(e){$('#msg').textContent=e.message}}
 async function details(id){location.href='/novel/'+id;return;
 let w=await api('/api/works/'+id);
 openModal(`<div class="detail-page">

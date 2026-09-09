@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /home
+Allow: /novel/
+Disallow: /admin
+Disallow: /manager
+Disallow: /login
+Disallow: /reader/
+Disallow: /api/
+Disallow: /uploads/avatars/
+Sitemap: /sitemap.xml

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>nightcomic — پنل مدیریت</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+:root{--violet:#55f7c1;--violet2:#3aedb1;--violet3:#84fcd4;--bg:#07070b;--panel:#101016;--panel2:#14141c;--line:rgba(192,132,252,.16);--muted:#9b98a8;--danger:#ef476f;--success:#35d39a;--warn:#f5b656}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 80% -10%,rgba(124,58,237,.24),transparent 32%),radial-gradient(circle at 0 50%,rgba(168,85,247,.08),transparent 28%),var(--bg);color:#f5fbf9;font-family:Tahoma,Arial,sans-serif;min-height:100vh}
+.app{display:flex;min-height:100vh}
+.sidebar{position:fixed;right:0;top:0;bottom:0;width:264px;padding:20px 16px;background:rgba(9,9,14,.94);border-left:1px solid var(--line);backdrop-filter:blur(18px);z-index:40;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:12px;padding:8px 8px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.brand img{width:42px;height:42px;object-fit:contain;border-radius:11px;filter:drop-shadow(0 0 13px rgba(168,85,247,.65))}
+.brand strong{font-size:17px;display:block}
+.brand small{display:block;color:var(--muted);font-size:10.5px;margin-top:3px}
+.who{display:flex;align-items:center;gap:10px;margin:16px 4px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(168,85,247,.05)}
+.who .dot{width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px rgba(53,211,154,.18);flex:none}
+.who b{font-size:13px;display:block}
+.who span{font-size:11px;color:var(--muted)}
+.nav{margin-top:6px;display:grid;gap:7px;flex:1}
+.nav button,.nav a{width:100%;border:1px solid transparent;background:transparent;color:#aaa7b5;text-decoration:none;text-align:right;padding:13px 14px;border-radius:13px;display:flex;align-items:center;gap:11px;font:inherit;font-size:14px;cursor:pointer;transition:.15s}
+.nav button:hover,.nav a:hover{background:rgba(168,85,247,.08);color:#fff}
+.nav .active{background:linear-gradient(90deg,rgba(168,85,247,.2),rgba(124,58,237,.07));border-color:var(--line);color:#fff;box-shadow:inset -3px 0 var(--violet)}
+.nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;flex:none}
+.nav-label{margin:14px 10px 2px;font-size:10.5px;color:#716d80;font-weight:700;letter-spacing:.3px}
+.side-bottom{display:grid;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.site-btn{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;text-decoration:none;color:#ddd;padding:11px;border:1px solid var(--line);border-radius:12px;background:#0e0e15;font-size:13px;cursor:pointer}
+.site-btn.danger{color:#ff8da8;border-color:rgba(239,71,111,.25);background:rgba(239,71,111,.08)}
+.site-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9}
+.main{margin-right:264px;width:calc(100% - 264px);padding:26px;max-width:1460px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px;flex-wrap:wrap}
+.title h1{margin:0;font-size:27px;display:flex;align-items:center;gap:10px}
+.title p{margin:7px 0 0;color:var(--muted);font-size:13px}
+.top-actions{display:flex;gap:9px}
+.ghost,.primary,.danger,.mini{border:0;border-radius:11px;padding:10px 15px;color:#fff;cursor:pointer;font:inherit;font-size:13px;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.ghost{background:#11111a;border:1px solid var(--line)}
+.ghost:hover{background:#181724}
+.primary{background:linear-gradient(135deg,var(--violet),var(--violet2));box-shadow:0 8px 22px rgba(124,58,237,.22)}
+.primary:hover{filter:brightness(1.08)}
+.danger{background:rgba(239,71,111,.13);border:1px solid rgba(239,71,111,.25);color:#ff8da8}
+.danger:hover{background:rgba(239,71,111,.2)}
+.mini{padding:8px 11px;background:#181720;border:1px solid rgba(255,255,255,.07);font-size:12px}
+.icon-16{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(20,20,28,.98),rgba(12,12,18,.98));border:1px solid rgba(255,255,255,.07);border-radius:17px;padding:18px;transition:.2s}
+.stat-card:hover{border-color:rgba(192,132,252,.3);transform:translateY(-2px)}
+.stat-card:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:rgba(168,85,247,.12);left:-35px;top:-45px;filter:blur(10px)}
+.stat-top{display:flex;justify-content:space-between;align-items:flex-start}
+.stat-label{color:var(--muted);font-size:12px}
+.stat-value{font-size:28px;font-weight:800;margin-top:9px}
+.stat-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(168,85,247,.14);color:var(--violet3)}
+.stat-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9}
+.section{display:none}
+.section.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.panel{background:linear-gradient(145deg,rgba(17,17,24,.98),rgba(11,11,16,.98));border:1px solid rgba(255,255,255,.07);border-radius:19px;padding:20px;margin-bottom:18px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px;flex-wrap:wrap}
+.panel-head h2{font-size:18px;margin:0;display:flex;align-items:center;gap:8px}
+.panel-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;color:#bcb8c8;font-weight:600}
+.field input,.field textarea,.field select,.search{width:100%;background:#09090e;color:#f4faf8;border:1px solid rgba(255,255,255,.09);outline:none;border-radius:11px;padding:12px;font:inherit}
+.field input:focus,.field textarea:focus,.field select:focus,.search:focus{border-color:rgba(168,85,247,.6);box-shadow:0 0 0 3px rgba(168,85,247,.08)}
+textarea{min-height:100px;resize:vertical}
+.filebox{border:1px dashed rgba(192,132,252,.35);background:rgba(168,85,247,.035);border-radius:14px;padding:16px;transition:.15s}
+.filebox:hover{border-color:rgba(192,132,252,.6);background:rgba(168,85,247,.06)}
+.filebox input{border:0;padding:7px 0;background:transparent;color:#f4faf8}
+.hint{font-size:11px;color:#858291;line-height:1.8;margin-top:6px}
+.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:14px}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.search-wrap{flex:1;position:relative}
+.search{padding-right:40px}
+.search-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:#777}
+.search-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.works-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.work-card{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;background:#0b0b11;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:10px;transition:.15s}
+.work-card:hover{border-color:rgba(192,132,252,.28);background:#0e0e15}
+.work-cover{width:60px;height:78px;object-fit:cover;border-radius:9px;background:#171720;border:1px solid rgba(255,255,255,.07)}
+.work-title{font-weight:700;font-size:14px}
+.work-meta{font-size:11px;color:var(--muted);margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+.work-meta span{white-space:nowrap}
+.work-actions{display:flex;flex-direction:column;gap:7px}
+.chapter-select{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:13px}
+.chapter-list{display:grid;gap:8px}
+.chapter-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#0a0a10;border:1px solid rgba(255,255,255,.06);padding:13px;border-radius:13px;transition:.15s}
+.chapter-row:hover{border-color:rgba(255,255,255,.12)}
+.chapter-info{display:flex;align-items:center;gap:11px}
+.chapter-badge{width:34px;height:34px;border-radius:10px;background:rgba(168,85,247,.12);color:var(--violet3);display:grid;place-items:center;font-size:12px;font-weight:800;flex:none}
+.chapter-info strong{display:block;font-size:13px}
+.chapter-info span{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.empty{text-align:center;padding:32px 20px;color:var(--muted);border:1px dashed rgba(255,255,255,.09);border-radius:13px}
+.empty svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.6;opacity:.5;margin-bottom:8px}
+.notice{padding:12px 14px;background:rgba(168,85,247,.06);border:1px solid var(--line);border-radius:11px;color:#bbb7c7;font-size:11.5px;line-height:1.9;display:flex;gap:9px;align-items:flex-start}
+.notice svg{width:16px;height:16px;stroke:var(--violet3);fill:none;stroke-width:2;flex:none;margin-top:2px}
+.toast{position:fixed;left:25px;bottom:25px;z-index:100;background:#17151e;border:1px solid var(--line);padding:12px 16px;border-radius:12px;box-shadow:0 15px 40px #0008;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;font-size:13px}
+.toast.show{opacity:1;transform:none}
+.mobile-bar{display:none}
+.overlay{display:none}
+.loading{opacity:.55;pointer-events:none}
+@media(max-width:1050px){.sidebar{width:224px}.main{margin-right:224px;width:calc(100% - 224px)}.stats{grid-template-columns:repeat(2,1fr)}.works-grid{grid-template-columns:1fr}}
+@media(max-width:720px){
+ .sidebar{right:-280px;width:264px;transition:right .25s ease;box-shadow:0 0 60px #000a}
+ .sidebar.open{right:0}
+ .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:35;backdrop-filter:blur(2px)}
+ .overlay.show{display:block}
+ .mobile-bar{display:flex;position:sticky;top:0;z-index:30;align-items:center;justify-content:space-between;gap:10px;padding:12px 4px;margin:-14px -6px 10px;background:rgba(7,7,11,.9);backdrop-filter:blur(10px)}
+ .mobile-bar b{font-size:14px;color:var(--muted);font-weight:700}
+ .mobile-menu-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:#11111a;color:#fff;display:grid;place-items:center;flex:none}
+ .mobile-menu-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+ .main{margin:0;width:100%;padding:6px 12px 28px}
+ .topbar{align-items:center;text-align:center;flex-direction:column;gap:14px}
+ .title{width:100%}
+ .top-actions{width:100%;justify-content:center}
+ .top-actions .ghost{display:none}
+ .top-actions .primary{justify-content:center}
+ .stats{grid-template-columns:repeat(2,1fr);gap:9px}
+ .stat-card{padding:14px}
+ .stat-value{font-size:21px}
+ .panel{padding:14px;border-radius:15px}
+ .form-grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}
+ .chapter-row{align-items:flex-start;flex-direction:column}
+ .chapter-row button{width:100%}
+ .topbar h1{font-size:22px}
+}
+
+/* v50 -- motion polish addition (does not remove any rule above) */
+*{scrollbar-width:thin;scrollbar-color:#55f7c166 transparent}
+*::-webkit-scrollbar{width:7px;height:7px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#84fcd4,#3aedb1);border-radius:10px}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #84fcd4;outline-offset:2px;border-radius:8px}
+.nav button,.nav a{transition:transform .25s cubic-bezier(.22,1,.36,1),background .25s,color .25s,box-shadow .25s}
+.nav button:hover,.nav a:hover{transform:translateX(-3px)}
+.stat-card,.work-row,.ticket-admin-row,.site-btn,button,.primary{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s,filter .2s}
+.stat-card:hover{transform:translateY(-3px)}
+.primary:hover{transform:translateY(-2px)}
+button:active,.primary:active,.site-btn:active{transform:scale(.96)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><img src="/assets/nightcomic-logo.png" onerror="this.style.display='none'"><div><strong>nightcomic</strong><small>پنل مدیریت حرفه‌ای</small></div></div>
+  <div class="who"><span class="dot"></span><div><b id="whoName">مدیر سایت</b><span>در حال مدیریت محتوای سایت</span></div></div>
+  <div class="nav-label">مدیریت محتوا</div>
+  <nav class="nav">
+    <button class="active" data-section="dashboard" onclick="showSection('dashboard',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>داشبورد</button>
+    <button data-section="works" onclick="showSection('works',this)"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 5.5v15"/></svg>آثار</button>
+    <button data-section="add" onclick="showSection('add',this)"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>افزودن اثر</button>
+    <button data-section="chapters" onclick="showSection('chapters',this)"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>فصل‌ها و آپلود فایل</button>
+  </nav>
+  <div class="side-bottom">
+    <a class="site-btn" href="/profile"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>بازگشت به پروفایل</a>
+    <a class="site-btn" href="/" target="_blank"><svg viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg>مشاهده سایت</a>
+    <button class="site-btn danger" onclick="doLogout()"><svg viewBox="0 0 24 24"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>خروج از حساب</button>
+  </div>
+</aside>
+<main class="main">
+  <div class="mobile-bar"><button class="mobile-menu-btn" onclick="openMenu()"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><b>nightcomic · مدیریت</b><span style="width:42px"></span></div>
+  <header class="topbar">
+    <div class="title"><h1>پنل مدیریت</h1><p>از اینجا آثار، فصل‌ها و فایل‌های nightcomic را مدیریت کن.</p></div>
+    <div class="top-actions"><button class="ghost" onclick="refreshAll()"><svg class="icon-16" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v6h-6"/></svg>به‌روزرسانی</button><a class="primary" href="/" target="_blank" style="text-decoration:none"><svg class="icon-16" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg>مشاهده سایت</a></div>
+  </header>
+
+<section id="dashboard" class="section active">
+  <div class="stats">
+    <div class="stat-card"><div class="stat-top"><span class="stat-label">کاربران</span><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></span></div><div class="stat-value" id="s-users">—</div></div>
+    <div class="stat-card"><div class="stat-top"><span class="stat-label">آثار ثبت‌شده</span><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/></svg></span></div><div class="stat-value" id="s-works">—</div></div>
+    <div class="stat-card"><div class="stat-top"><span class="stat-label">فصل‌ها</span><span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span></div><div class="stat-value" id="s-chapters">—</div></div>
+    <div class="stat-card"><div class="stat-top"><span class="stat-label">صفحات آپلودشده</span><span class="stat-icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></span></div><div class="stat-value" id="s-pages">—</div></div>
+  </div>
+  <div class="panel"><div class="panel-head"><div><h2>دسترسی سریع</h2><p>کارهای پرتکرار مدیریت را با یک کلیک انجام بده.</p></div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <button class="primary" onclick="showSection('add',document.querySelector('[data-section=add]'))">＋ افزودن اثر جدید</button>
+      <button class="ghost" onclick="showSection('chapters',document.querySelector('[data-section=chapters]'))">آپلود فصل و فایل</button>
+      <button class="ghost" onclick="showSection('works',document.querySelector('[data-section=works]'))">مشاهده همه آثار</button>
+    </div>
+  </div>
+  <div class="panel"><div class="panel-head"><div><h2>آخرین آثار ثبت‌شده</h2><p>تازه‌ترین آثاری که به کتابخانه سایت اضافه شده‌اند.</p></div></div><div id="dashWorks" class="works-grid"></div></div>
+</section>
+
+<section id="works" class="section">
+ <div class="panel"><div class="panel-head"><div><h2>مدیریت آثار</h2><p>همه آثار سایت را جستجو کن یا اثری را حذف کن.</p></div><button class="primary" onclick="showSection('add',document.querySelector('[data-section=add]'))">＋ اثر جدید</button></div>
+ <div class="toolbar"><div class="search-wrap"><span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><input id="workSearch" class="search" placeholder="جستجو بر اساس عنوان اثر..." oninput="renderWorks()"></div></div>
+ <div id="worksGrid" class="works-grid"></div></div>
+</section>
+
+<section id="add" class="section">
+ <div class="panel"><div class="panel-head"><div><h2>افزودن اثر جدید</h2><p>اطلاعات اثر را کامل کن. فیلدهای بدون ستاره اختیاری هستند.</p></div></div>
+ <form id="workForm" enctype="multipart/form-data"><div class="form-grid">
+  <div class="field"><label>عنوان فارسی *</label><input name="title" required placeholder="مثلاً تکامل فقط من"></div><div class="field"><label>عنوان انگلیسی</label><input name="english_title" placeholder="English title"></div>
+  <div class="field"><label>نوع اثر</label><select name="kind"><option>مانهوا</option><option>مانگا</option><option>مانها</option><option>کمیک</option><option>ناول</option></select></div><div class="field"><label>وضعیت انتشار</label><input name="status" value="در حال انتشار"></div>
+  <div class="field"><label>سال انتشار</label><input name="year" placeholder="۲۰۲۶"></div><div class="field"><label>ژانرها</label><input name="genres" placeholder="اکشن، فانتزی، ماجراجویی"></div>
+  <div class="field"><label>نویسنده</label><input name="author"></div><div class="field"><label>طراح</label><input name="designer"></div>
+  <div class="field"><label>مترجم</label><input name="translator"></div><div class="field"><label>کلینر</label><input name="cleaner"></div>
+  <div class="field"><label>تایپیست</label><input name="typesetter"></div><div class="field"><label>ناشر</label><input name="publisher"></div>
+  <div class="field full"><label>خلاصه داستان</label><textarea name="description" placeholder="خلاصه‌ای کوتاه و جذاب از داستان اثر بنویس..."></textarea></div>
+  <div class="field full"><label>کاور اثر</label><div class="filebox"><input name="cover" type="file" accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.avif"><div class="hint">هر فرمت تصویری مجاز است. ترجیحاً از کاور عمودی و باکیفیت استفاده کن تا در کارت‌های سایت بهتر دیده شود.</div></div></div>
+ </div><div class="form-actions"><button type="reset" class="ghost">پاک کردن فرم</button><button class="primary">ثبت اثر</button></div><p id="workMsg" class="hint"></p></form></div>
+</section>
+
+<section id="chapters" class="section">
+ <div class="panel"><div class="panel-head"><div><h2>افزودن فصل و آپلود فایل</h2><p>تصاویر صفحات را تک‌تک یا در قالب یک فایل ZIP آپلود کن.</p></div></div>
+ <form id="chapterForm" enctype="multipart/form-data"><div class="form-grid">
+  <div class="field"><label>انتخاب اثر</label><select id="workId" name="work_id"></select></div>
+  <div class="field"><label>عنوان فصل</label><input name="title" placeholder="عنوان فصل (اختیاری)"></div>
+  <div class="field"><label>شماره فصل</label><input name="number" type="number" step="0.1" placeholder="مثلاً ۲۵ (اختیاری)"></div>
+  <div class="field full"><label>آپلود تصاویر صفحات</label><div class="filebox"><input type="file" name="pages" accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.avif" multiple><div class="hint">می‌توانی چند تصویر را همزمان انتخاب کنی؛ ترتیب فایل‌ها همان ترتیب صفحات خواهد بود.</div></div></div>
+  <div class="field full"><label>یا آپلود فایل ZIP فصل</label><div class="filebox"><input type="file" name="zip" accept=".zip,application/zip"><div class="hint">اگر ZIP انتخاب شود، صفحات داخل آن به‌صورت خودکار استخراج و مرتب می‌شوند. نام‌گذاری عددی مثل 001.jpg و 002.jpg برای ترتیب درست‌تر توصیه می‌شود.</div></div></div>
+ </div><div class="form-actions"><button class="primary">＋ افزودن فصل</button></div></form></div>
+
+ <div class="panel"><div class="panel-head"><div><h2>مدیریت فصل‌های موجود</h2><p>فصل‌های هر اثر را جداگانه ببین و در صورت نیاز فقط همان فصل را حذف کن.</p></div></div>
+ <div class="chapter-select"><select id="chapterWorkId"></select><button class="ghost" onclick="loadChapters(document.getElementById('chapterWorkId').value)"><svg class="icon-16" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v6h-6"/></svg></button></div>
+ <div id="chapterList" class="chapter-list"><div class="empty">یک اثر را از لیست بالا انتخاب کن تا فصل‌هایش نمایش داده شود.</div></div>
+ <div class="notice" style="margin-top:13px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>حذف یک فصل فقط همان فصل و صفحاتش را پاک می‌کند؛ بقیه فصل‌های همان اثر دست‌نخورده باقی می‌مانند.</div></div>
+</section>
+</main></div><div id="toast" class="toast"></div>
+<script>
+const $=s=>document.querySelector(s);let works=[];
+async function api(u,o){const r=await fetch(u,o);const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'خطای سرور');return d}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove('show'),2600)}
+function openMenu(){$('#sidebar').classList.add('open');$('#overlay').classList.add('show')}
+function closeMenu(){$('#sidebar').classList.remove('open');$('#overlay').classList.remove('show')}
+async function doLogout(){try{await api('/api/logout',{method:'POST'})}catch(e){}location.href='/login'}
+function showSection(id,btn){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');document.querySelectorAll('.nav [data-section]').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');closeMenu();window.scrollTo({top:0,behavior:'smooth'});if(id==='chapters'&&works.length)loadChapters($('#chapterWorkId').value||works[0].id)}
+function workCard(w){return `<div class="work-card"><img class="work-cover" src="${esc(w.cover||'/assets/nightcomic-logo.png')}" onerror="this.src='/assets/nightcomic-logo.png'"><div><div class="work-title">${esc(w.title)}</div><div class="work-meta"><span>${esc(w.kind||'مانهوا')}</span><span>·</span><span>${w.chapter_count||0} فصل</span><span>·</span><span>${w.views||0} بازدید</span></div></div><div class="work-actions"><button class="mini" onclick="pickWork(${w.id})">فصل‌ها</button><button class="danger" onclick="removeWork(${w.id})">حذف</button></div></div>`}
+function renderWorks(){const q=($('#workSearch')?.value||'').trim().toLowerCase();const filtered=works.filter(w=>String(w.title||'').toLowerCase().includes(q)||String(w.english_title||'').toLowerCase().includes(q));$('#worksGrid').innerHTML=filtered.length?filtered.map(workCard).join(''):'<div class="empty" style="grid-column:1/-1">اثری با این عنوان پیدا نشد.</div>';$('#dashWorks').innerHTML=works.slice(0,6).map(workCard).join('')||'<div class="empty" style="grid-column:1/-1"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21z"/></svg><div>هنوز هیچ اثری ثبت نشده. از بخش «افزودن اثر» شروع کن.</div></div>'}
+function syncWorkSelects(preferred){const a=$('#workId'),b=$('#chapterWorkId');const html=works.map(w=>`<option value="${w.id}">${esc(w.title)}</option>`).join('');a.innerHTML=html;b.innerHTML=html;if(works.length){const id=preferred&&works.some(w=>w.id==preferred)?preferred:works[0].id;a.value=id;b.value=id}else{$('#chapterList').innerHTML='<div class="empty">هنوز اثری ثبت نشده است.</div>'}}
+async function loadWhoAmI(){try{const m=await api('/api/me');if(m.user)$('#whoName').textContent=m.user.username}catch(e){}}
+async function refreshAll(preferred){try{const [s,d]=await Promise.all([api('/api/admin/stats'),api('/api/works')]);$('#s-users').textContent=s.users;$('#s-works').textContent=s.works;$('#s-chapters').textContent=s.chapters;$('#s-pages').textContent=s.pages;works=d.works||[];syncWorkSelects(preferred);renderWorks();if(works.length)await loadChapters($('#chapterWorkId').value)}catch(e){toast(e.message)}}
+function pickWork(id){showSection('chapters',document.querySelector('[data-section=chapters]'));$('#chapterWorkId').value=id;$('#workId').value=id;loadChapters(id)}
+async function loadChapters(workId){if(!workId){$('#chapterList').innerHTML='<div class="empty">یک اثر را انتخاب کن.</div>';return}$('#chapterList').innerHTML='<div class="empty">در حال بارگذاری فصل‌ها...</div>';try{const w=await api('/api/works/'+workId);const ch=w.chapters||[];$('#chapterList').innerHTML=ch.length?ch.map(c=>`<div class="chapter-row"><div class="chapter-info"><span class="chapter-badge">${esc(c.number)}</span><div><strong>فصل ${esc(c.number)} — ${esc(c.title||'بدون عنوان')}</strong><span>شناسه فصل: ${c.id}</span></div></div><button class="danger" onclick="removeChapter(${c.id},${w.id})">🗑 حذف فصل</button></div>`).join(''):'<div class="empty">این اثر هنوز هیچ فصلی ندارد.</div>'}catch(e){$('#chapterList').innerHTML=`<div class="empty">${esc(e.message)}</div>`}}
+async function removeChapter(id,workId){if(!confirm('این فصل و تمام صفحات آن برای همیشه حذف شود؟'))return;try{await api('/api/admin/chapter/'+id,{method:'DELETE'});toast('فصل با موفقیت حذف شد');await refreshAll(workId);$('#chapterWorkId').value=workId;await loadChapters(workId)}catch(e){toast(e.message)}}
+async function removeWork(id){if(!confirm('این اثر همراه با تمام فصل‌ها و صفحاتش حذف شود؟ این کار قابل بازگشت نیست.'))return;try{await api('/api/admin/work/'+id,{method:'DELETE'});toast('اثر حذف شد');await refreshAll()}catch(e){toast(e.message)}}
+$('#chapterWorkId').addEventListener('change',e=>{$('#workId').value=e.target.value;loadChapters(e.target.value)});$('#workId').addEventListener('change',e=>{$('#chapterWorkId').value=e.target.value;loadChapters(e.target.value)});
+$('#workForm').onsubmit=async e=>{e.preventDefault();const form=e.target;form.classList.add('loading');try{await api('/api/admin/work',{method:'POST',body:new FormData(form)});form.reset();$('#workMsg').textContent='اثر با موفقیت ثبت شد.';toast('اثر با موفقیت اضافه شد');await refreshAll();showSection('works',document.querySelector('[data-section=works]'))}catch(x){$('#workMsg').textContent=x.message;toast(x.message)}finally{form.classList.remove('loading')}};
+$('#chapterForm').onsubmit=async e=>{e.preventDefault();const form=e.target,id=$('#workId').value;if(!id)return toast('ابتدا یک اثر انتخاب کن');form.classList.add('loading');try{await api('/api/admin/work/'+id+'/chapter',{method:'POST',body:new FormData(form)});form.reset();$('#workId').value=id;$('#chapterWorkId').value=id;toast('فصل با موفقیت آپلود شد');await refreshAll(id);await loadChapters(id)}catch(x){toast(x.message)}finally{form.classList.remove('loading')}};
+loadWhoAmI();refreshAll();
+</script>
+</body></html>

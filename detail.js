@@ -11,6 +11,11 @@ async function init(){
   loadComments();
 }
 function tags(){return (work.genres||'').split(/[,،|]/).map(x=>x.trim()).filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join('')}
+function statIcon(name){const icons={
+ eye:'<svg viewBox="0 0 24 24"><path d="M1 12s4.5-7.5 11-7.5S23 12 23 12s-4.5 7.5-11 7.5S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+ star:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.5l3.09 6.26 6.91 1-5 4.87 1.18 6.87L12 17.9l-6.18 3.6L7 14.63l-5-4.87 6.91-1z"/></svg>',
+ book:'<svg viewBox="0 0 24 24"><path d="M4 19.2A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+};return icons[name]||''}
 function metaRow(label,value){return `<div class="meta-row"><span>${esc(label)}</span><b>${esc(value||'-')}</b></div>`}
 function render(){
   $('#detailApp').innerHTML=`
@@ -32,9 +37,9 @@ function render(){
         ${work.english_title?`<p class="english-title">${esc(work.english_title)}</p>`:''}
         <div class="tag-list">${tags()}</div>
         <div class="quick-stats">
-          <span>👁 ${Number(work.views||0).toLocaleString('fa-IR')}</span>
-          <span>⭐ ${work.rating_avg||'—'} / 5</span>
-          <span>📚 ${work.chapter_count||0} فصل</span>
+          <span class="stat-eye">${statIcon('eye')} ${Number(work.views||0).toLocaleString('fa-IR')}</span>
+          <span class="stat-star">${statIcon('star')} ${work.rating_avg||'—'} / 5</span>
+          <span class="stat-book">${statIcon('book')} ${work.chapter_count||0} فصل</span>
         </div>
         <div class="hero-buttons">
           ${work.chapters?.length?`<button class="primary big" onclick="openChapter(${work.chapters[0].id})">📖 شروع به خواندن</button>`:''}

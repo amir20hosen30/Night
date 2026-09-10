@@ -66,7 +66,7 @@ function render(){
 
     <section id="tab-rating" class="tab-content">
       <div class="two-col">
-        <div class="detail-card rating-box"><h2>امتیاز کاربران</h2><div class="big-rating">⭐ ${work.rating_avg||'—'} <small>/ 5</small></div><p>${work.rating_count||0} رای ثبت شده</p><div class="stars">${[1,2,3,4,5].map(n=>`<button onclick="rate(${n})">★</button>`).join('')}</div></div>
+        <div class="detail-card rating-box"><h2>امتیاز کاربران</h2><div class="big-rating"><span class="big-rating-star">${statIcon('star')}</span> ${work.rating_avg||'—'} <small>/ 5</small></div><p>${work.rating_count||0} رای ثبت شده</p><div class="stars">${[1,2,3,4,5].map(n=>`<button onclick="rate(${n})" aria-label="امتیاز ${n}">${statIcon('star')}</button>`).join('')}</div></div>
         <div class="detail-card donation-box"><h2>حمایت و دونیت</h2><p>اگر از ترجمه و سایت راضی هستی، می‌توانی از تیم ترجمه حمایت کنی.</p><div class="donate-row">${[10,25,50,100].map(n=>`<button onclick="donate(${n})">${n} هزار</button>`).join('')}</div><small>این بخش در نسخه محلی، ثبت حمایت را شبیه‌سازی می‌کند.</small></div>
       </div>
     </section>

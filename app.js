@@ -2,10 +2,10 @@ let me=null,works=[],filters={sort:'newest',status:'all',type:'all',genre:'all',
 async function api(url,opt={}){let r=await fetch(url,opt),d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'خطا');return d}
 async function init(){let m=await api('/api/me');me=m.user;renderHeaderProfile();await load();renderProfile();routeFromUrl();if(me)updateUserTicketBadge();if(me?.role==='admin')updateAdminTicketBadge();}
 async function load(q=''){let d=await api('/api/works?q='+encodeURIComponent(q));works=d.works;renderHome(works);applyFilters()}
-function card(w,opts){opts=opts||{};const badge=opts.rank?`<span class="card-rank">${opts.rank}</span>`:'';return `<article class="card" onclick="location.href='/novel/${w.id}'"><div class="cover">${badge}${w.cover?`<img src="${w.cover}" alt="">`:''}<b>${w.title}</b></div><div class="info"><b>${w.title}</b><br><small>${w.kind||'اثر'} • ${w.chapter_count||0} فصل</small><div class="card-stats"><span>◉ ${Number(w.views||0).toLocaleString('fa-IR')} بازدید</span>${w.favorite_count?`<span>♥ ${Number(w.favorite_count).toLocaleString('fa-IR')}</span>`:''}${w.rating_avg?`<span>★ ${w.rating_avg}</span>`:''}</div></div></article>`}
+function card(w,opts){opts=opts||{};const badge=opts.rank?`<span class="card-rank">${opts.rank}</span>`:'';return `<article class="card" onclick="location.href='/novel/${w.id}'"><div class="cover">${badge}${w.cover?`<img src="${w.cover}" alt="">`:''}<b>${w.title}</b></div><div class="info"><b>${w.title}</b><br><small>${w.kind||'اثر'} • ${w.chapter_count||0} فصل</small><div class="card-stats"><span class="stat-eye">${icon('eye')} ${Number(w.views||0).toLocaleString('fa-IR')}</span>${w.favorite_count?`<span>♥ ${Number(w.favorite_count).toLocaleString('fa-IR')}</span>`:''}${w.rating_avg?`<span>★ ${w.rating_avg}</span>`:''}</div></div></article>`}
 function sideThumb(w){return w.cover?`<img src="${w.cover}" alt="">`:`<span>${(w.title||'؟').slice(0,1)}</span>`}
 function sideRankItem(w,i){return `<div class="side-item" onclick="location.href='/novel/${w.id}'"><span class="side-rank">${i+1}</span><div class="side-thumb">${sideThumb(w)}</div><div class="side-info"><b>${w.title}</b><small>${w.chapter_count||0} فصل</small></div><span class="side-stat">★ ${w.rating_avg||0}</span></div>`}
-function sideViewItem(w,i){return `<div class="side-item" onclick="location.href='/novel/${w.id}'"><span class="side-rank">${i+1}</span><div class="side-thumb">${sideThumb(w)}</div><div class="side-info"><b>${w.title}</b><small>${w.chapter_count||0} فصل</small></div><span class="side-stat">◉ ${Number(w.views||0).toLocaleString('fa-IR')}</span></div>`}
+function sideViewItem(w,i){return `<div class="side-item" onclick="location.href='/novel/${w.id}'"><span class="side-rank">${i+1}</span><div class="side-thumb">${sideThumb(w)}</div><div class="side-info"><b>${w.title}</b><small>${w.chapter_count||0} فصل</small></div><span class="side-stat stat-eye">${icon('eye')} ${Number(w.views||0).toLocaleString('fa-IR')}</span></div>`}
 function renderHomeGenres(list){
   const box=$('#homeGenres');
   if(!box)return;
@@ -17,6 +17,7 @@ function renderHomeGenres(list){
 }
 
 function goGenre(g){filters.genre=g;document.querySelectorAll('#genreFilters button').forEach(b=>b.classList.toggle('selected',normalize(b.dataset.value)===normalize(g)));applyFilters();navigate('explore')}
+let heroList=[],heroIndex=0,heroTimer=null;
 function heroStartReading(){const id=window.__heroWorkId;if(id)location.href='/novel/'+id;else navigate('explore')}
 function renderHero(w){
   const img=$('#heroFeaturedCover'); const title=$('#heroFeaturedTitle'); const en=$('#heroFeaturedEnglish'); const rating=$('#heroFeaturedRating');
@@ -27,10 +28,34 @@ function renderHero(w){
   if(en)en.textContent=w.english_title||'nightcomic';
   if(rating)rating.textContent=w.rating_avg||'0';
 }
+function renderHeroDots(){
+  const box=$('#heroDots');if(!box)return;
+  if(heroList.length<2){box.innerHTML='';return}
+  box.innerHTML=heroList.map((w,i)=>`<i class="${i===heroIndex?'active':''}" onclick="heroGoto(${i})"></i>`).join('');
+}
+function heroGoto(i){
+  if(!heroList.length)return;
+  heroIndex=((i%heroList.length)+heroList.length)%heroList.length;
+  renderHero(heroList[heroIndex]);
+  renderHeroDots();
+  heroResetTimer();
+}
+function heroResetTimer(){
+  if(heroTimer)clearInterval(heroTimer);
+  if(heroList.length>1)heroTimer=setInterval(()=>heroGoto(heroIndex+1),6000);
+}
+function initHeroCarousel(list){
+  heroList=list.slice(0,5);
+  heroIndex=0;
+  renderHero(heroList[0]);
+  renderHeroDots();
+  heroResetTimer();
+}
 function renderHome(list){
   const latest=[...list].sort((a,b)=>b.id-a.id).slice(0,8);
   const popular=[...list].sort((a,b)=>(b.views||0)-(a.views||0)||(b.favorite_count||0)-(a.favorite_count||0)||b.id-a.id).slice(0,5);
-  renderHero(popular[0]||latest[0]);
+  const featured=[...new Map([...latest,...popular].map(w=>[w.id,w])).values()].sort((a,b)=>b.id-a.id).slice(0,5);
+  initHeroCarousel(featured);
   $('#latestWorks').innerHTML=latest.map(w=>card(w)).join('')||'<p>هنوز اثری ثبت نشده است.</p>';
   $('#popularWorks').innerHTML=popular.map((w,i)=>card(w,{rank:i+1})).join('')||'<p>هنوز اثری ثبت نشده است.</p>';
   const topRated=[...list].sort((a,b)=>(b.rating_avg||0)-(a.rating_avg||0)||(b.favorite_count||0)-(a.favorite_count||0)||b.id-a.id).slice(0,5);
@@ -58,7 +83,8 @@ function icon(name){const icons={
  bell:'<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
  logout:'<svg viewBox="0 0 24 24"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>',
  user:'<svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>',
- shield:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg>'
+ shield:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="m9.5 12 2 2 3.5-3.5"/></svg>',
+ eye:'<svg viewBox="0 0 24 24"><path d="M1 12s4.5-7.5 11-7.5S23 12 23 12s-4.5 7.5-11 7.5S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>'
 };return icons[name]||''}
 function profileNotice(title,text){openModal(`<div class="box profile-notice"><button class="close" onclick="closeModal()">×</button><div class="notice-icon">${icon('bell')}</div><h2>${title}</h2><p>${text}</p><button class="primary" onclick="closeModal()">باشه</button></div>`)}
 function renderHeaderProfile(){const b=$('#loginOpen');if(!b)return;if(me)b.innerHTML=me.avatar?`<img class="header-avatar" src="${me.avatar}" alt="پروفایل">`:icon('user');else b.innerHTML=`<svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg><span>ورود / ثبت‌نام</span>`}

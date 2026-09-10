@@ -66,7 +66,7 @@ function render(){
 
     <section id="tab-rating" class="tab-content">
       <div class="two-col">
-        <div class="detail-card rating-box"><h2>امتیاز کاربران</h2><div class="big-rating"><span class="big-rating-star">${statIcon('star')}</span> ${work.rating_avg||'—'} <small>/ 5</small></div><p>${work.rating_count||0} رای ثبت شده</p><div class="stars">${[1,2,3,4,5].map(n=>`<button onclick="rate(${n})" aria-label="امتیاز ${n}">${statIcon('star')}</button>`).join('')}</div></div>
+        <div class="detail-card rating-box"><h2>امتیاز کاربران</h2><div class="big-rating"><span class="big-rating-star">${statIcon('star')}</span> ${work.rating_avg||'—'} <small>/ 5</small></div><p>${work.rating_count||0} رای ثبت شده</p><div class="stars" id="ratingStars" onmouseleave="resetStars()">${[1,2,3,4,5].map(n=>`<button data-n="${n}" class="${n<=(work.my_rating||0)?'filled':''}" onclick="rate(${n})" onmouseenter="previewStars(${n})" aria-label="امتیاز ${n}">${statIcon('star')}</button>`).join('')}</div>${work.my_rating?`<small class="my-rating-note">امتیاز شما: ${work.my_rating} از 5</small>`:''}</div>
         <div class="detail-card donation-box"><h2>حمایت و دونیت</h2><p>اگر از ترجمه و سایت راضی هستی، می‌توانی از تیم ترجمه حمایت کنی.</p><div class="donate-row">${[10,25,50,100].map(n=>`<button onclick="donate(${n})">${n} هزار</button>`).join('')}</div><small>این بخش در نسخه محلی، ثبت حمایت را شبیه‌سازی می‌کند.</small></div>
       </div>
     </section>
@@ -110,6 +110,8 @@ async function favorite(){
   work.favorite=r.favorite;render();switchTab(currentTab);
 }
 function openChapter(cid){location.href='/reader/'+cid}
+function previewStars(n){document.querySelectorAll('#ratingStars button').forEach(b=>b.classList.toggle('hover-filled',+b.dataset.n<=n))}
+function resetStars(){document.querySelectorAll('#ratingStars button').forEach(b=>b.classList.remove('hover-filled'))}
 async function rate(value){
   if(!me)return login();
   work=await api('/api/works/'+work.id+'/rate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({value})});

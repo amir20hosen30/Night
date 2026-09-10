@@ -115,7 +115,7 @@ app.get('/api/admin/tickets/:id',admin,(req,res)=>{const t=db.tickets.find(x=>x.
 app.post('/api/admin/tickets/:id/reply',admin,uploadTicketFile.single('file'),(req,res)=>{const t=db.tickets.find(x=>x.id===+req.params.id);if(!t)return res.status(404).json({error:'تیکت پیدا نشد'});const text=String(req.body?.message||'').trim().slice(0,3000);if(!text&&!req.file)return res.status(400).json({error:'متن پاسخ یا فایل را وارد کنید.'});const now=new Date().toISOString();const msg={from:'admin',by:user(req).username,text,at:now};if(req.file)msg.attachment={name:req.file.originalname,url:'/uploads/tickets/'+req.file.filename};t.messages.push(msg);const status=req.body?.status;t.status=['open','answered','closed'].includes(status)?status:'answered';t.admin_seen=true;t.user_unread=true;t.updated_at=now;save();res.json({ticket:ticketOut(t)})});
 app.patch('/api/admin/tickets/:id',admin,(req,res)=>{const t=db.tickets.find(x=>x.id===+req.params.id);if(!t)return res.status(404).json({error:'تیکت پیدا نشد'});if(req.body?.status!==undefined&&['open','answered','closed'].includes(req.body.status))t.status=req.body.status;if(req.body?.admin_seen!==undefined)t.admin_seen=!!req.body.admin_seen;t.updated_at=new Date().toISOString();save();res.json({ticket:ticketOut(t)})});
 app.get('/api/works',(req,res)=>{const q=(req.query.q||'').trim().toLowerCase();let works=db.works.filter(w=>!q||[w.title,w.english_title,w.description].some(v=>String(v||'').toLowerCase().includes(q))).sort((a,b)=>b.id-a.id);res.json({works:works.map(withCount)})});
-app.get('/api/works/:id',(req,res)=>{const w=db.works.find(x=>x.id===+req.params.id);if(!w)return res.status(404).json({error:'اثر پیدا نشد'});w.views=(w.views||0)+1;save();const out=withCount(w);out.chapters=db.chapters.filter(c=>c.work_id===w.id).sort((a,b)=>b.number-a.number);if(user(req))out.favorite=db.favorites.some(f=>f.user_id===user(req).id&&f.work_id===w.id);res.json(out)});
+app.get('/api/works/:id',(req,res)=>{const w=db.works.find(x=>x.id===+req.params.id);if(!w)return res.status(404).json({error:'اثر پیدا نشد'});w.views=(w.views||0)+1;save();const out=withCount(w);out.chapters=db.chapters.filter(c=>c.work_id===w.id).sort((a,b)=>b.number-a.number);if(user(req)){out.favorite=db.favorites.some(f=>f.user_id===user(req).id&&f.work_id===w.id);const mine=db.ratings.find(r=>r.work_id===w.id&&r.user_id===user(req).id);out.my_rating=mine?mine.value:0}res.json(out)});
 
 app.get('/api/works/:id/comments',auth,(req,res)=>{
   const id=+req.params.id;
@@ -134,7 +134,7 @@ app.post('/api/works/:id/rate',auth,(req,res)=>{
   const old=db.ratings.find(r=>r.work_id===id&&r.user_id===user(req).id);
   if(old)old.value=value;
   else db.ratings.push({id:next('ratings'),work_id:id,user_id:user(req).id,value});
-  save();res.json(withCount(db.works.find(w=>w.id===id)));
+  save();const out=withCount(db.works.find(w=>w.id===id));out.my_rating=value;res.json(out);
 });
 app.post('/api/works/:id/donate',auth,(req,res)=>{
   const id=+req.params.id, amount=Math.max(1,Math.round(+req.body?.amount||0));

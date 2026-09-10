@@ -1,22 +1,22 @@
 
-.reader-body{margin:0;background:#080808;color:#eee;padding-bottom:40px}.reader-top{position:sticky;top:0;z-index:50;height:60px;background:#0d0d0deF;border-bottom:1px solid #222;display:flex;align-items:center;gap:12px;padding:0 12px;backdrop-filter:blur(12px)}.reader-btn{border:0;background:#1b1b1b;color:#fff;border-radius:10px;padding:9px 13px;text-decoration:none;cursor:pointer}.reader-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}.reader-main{max-width:1000px;margin:auto}.reader-tools{position:sticky;top:60px;z-index:40;background:#111;border-bottom:1px solid #222;display:flex;justify-content:center;align-items:center;gap:7px;padding:9px}.reader-tools button{border:1px solid #333;background:#1c1c1c;color:#eee;border-radius:9px;padding:7px 12px;cursor:pointer}.reader-tools button:hover{border-color:#c5ccd6;color:#c5ccd6}.reader-pages{padding:10px 0 35px;overflow-x:auto}.manga-page{display:block;width:100%;max-width:none;height:auto;margin:0 auto 7px;transition:width .15s;transform-origin:top center}.reader-loading{text-align:center;color:#999;padding:100px 20px}.chapter-navigation{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:20px 12px 70px}.nav-chapter{border:1px solid #333;background:#191919;color:#eee;border-radius:12px;padding:14px;text-align:center;cursor:pointer;text-decoration:none}.nav-chapter:hover:not(:disabled){border-color:#c5ccd6;color:#c5ccd6}.nav-chapter:disabled{opacity:.35;cursor:not-allowed}.nav-chapter.secondary{color:#c5ccd6}@media(max-width:600px){.reader-title{font-size:13px}.reader-tools{overflow-x:auto;justify-content:flex-start}.chapter-navigation{grid-template-columns:1fr 1fr}.chapter-navigation .secondary{grid-column:1/-1;grid-row:2}.manga-page{margin-bottom:4px}}
+.reader-body{margin:0;background:#080808;color:#eee;padding-bottom:40px}.reader-top{position:sticky;top:0;z-index:50;height:60px;background:#0d0d0deF;border-bottom:1px solid #222;display:flex;align-items:center;gap:12px;padding:0 12px;backdrop-filter:blur(12px)}.reader-btn{border:0;background:#1b1b1b;color:#fff;border-radius:10px;padding:9px 13px;text-decoration:none;cursor:pointer}.reader-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}.reader-main{max-width:1000px;margin:auto}.reader-tools{position:sticky;top:60px;z-index:40;background:#111;border-bottom:1px solid #222;display:flex;justify-content:center;align-items:center;gap:7px;padding:9px}.reader-tools button{border:1px solid #333;background:#1c1c1c;color:#eee;border-radius:9px;padding:7px 12px;cursor:pointer}.reader-tools button:hover{border-color:#4f7cff;color:#4f7cff}.reader-pages{padding:10px 0 35px;overflow-x:auto}.manga-page{display:block;width:100%;max-width:none;height:auto;margin:0 auto 7px;transition:width .15s;transform-origin:top center}.reader-loading{text-align:center;color:#999;padding:100px 20px}.chapter-navigation{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:20px 12px 70px}.nav-chapter{border:1px solid #333;background:#191919;color:#eee;border-radius:12px;padding:14px;text-align:center;cursor:pointer;text-decoration:none}.nav-chapter:hover:not(:disabled){border-color:#4f7cff;color:#4f7cff}.nav-chapter:disabled{opacity:.35;cursor:not-allowed}.nav-chapter.secondary{color:#4f7cff}@media(max-width:600px){.reader-title{font-size:13px}.reader-tools{overflow-x:auto;justify-content:flex-start}.chapter-navigation{grid-template-columns:1fr 1fr}.chapter-navigation .secondary{grid-column:1/-1;grid-row:2}.manga-page{margin-bottom:4px}}
 
 /* v29 reader theme */
-:root{--reader-a:#c5ccd6}
+:root{--reader-a:#4f7cff}
 body{background:#06060a!important}
 .reader-bar,.reader-controls{background:rgba(10,10,15,.92)!important;border-color:#ffffff10!important;backdrop-filter:blur(18px)}
 .reader-bar button,.reader-controls button{background:#15151e!important;border-color:#ffffff0d!important}
-.reader-bar button:hover,.reader-controls button:hover{border-color:#c5ccd6!important}
+.reader-bar button:hover,.reader-controls button:hover{border-color:#4f7cff!important}
 .manga-page{box-shadow:0 12px 40px rgba(0,0,0,.35)}
 
 /* v50 — finish the purple migration (these two hovers were missed
    in the v29 pass and were still the old yellow accent) + motion polish */
-.reader-tools button:hover{border-color:var(--reader-a,#c5ccd6)!important;color:var(--reader-a,#c5ccd6)!important}
-.nav-chapter:hover:not(:disabled){border-color:var(--reader-a,#c5ccd6)!important;color:var(--reader-a,#c5ccd6)!important}
-.nav-chapter.secondary{color:var(--reader-a,#c5ccd6)!important}
+.reader-tools button:hover{border-color:var(--reader-a,#4f7cff)!important;color:var(--reader-a,#4f7cff)!important}
+.nav-chapter:hover:not(:disabled){border-color:var(--reader-a,#4f7cff)!important;color:var(--reader-a,#4f7cff)!important}
+.nav-chapter.secondary{color:var(--reader-a,#4f7cff)!important}
 
 .reader-tools button,.nav-chapter,.reader-btn{transition:transform .25s ease,border-color .25s ease,color .25s ease,box-shadow .25s ease}
-.reader-tools button:hover{box-shadow:0 0 14px rgba(212,212,212,.25)}
+.reader-tools button:hover{box-shadow:0 0 14px rgba(91,134,255,.25)}
 .reader-btn:hover{transform:translateY(-1px)}
 .nav-chapter:hover:not(:disabled){transform:translateY(-2px)}
 
